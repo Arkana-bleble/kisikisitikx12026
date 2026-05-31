@@ -1,0 +1,426 @@
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.app{font-family:var(--font-sans);color:var(--color-text-primary);min-height:500px}
+.hdr{background:linear-gradient(135deg,#1a2e1e 0%,#2d4f30 100%);padding:1.5rem;text-align:center;border-radius:var(--border-radius-lg) var(--border-radius-lg) 0 0}
+.hdr .badge{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#c8a96e;border:1px solid #9a7a45;padding:.2rem .65rem;border-radius:4px;margin-bottom:.6rem}
+.hdr h1{font-size:20px;font-weight:500;color:#f5f0e8;line-height:1.3}
+.hdr h1 span{color:#c8a96e}
+.hdr p{font-size:12px;color:rgba(245,240,232,.55);margin-top:.25rem}
+nav{display:flex;border-bottom:1px solid var(--color-border-tertiary);background:var(--color-background-primary)}
+nav button{flex:1;background:none;border:none;border-bottom:2.5px solid transparent;padding:.7rem .5rem;font-size:12px;font-weight:500;color:var(--color-text-secondary);cursor:pointer;transition:all .2s;letter-spacing:.04em;display:flex;align-items:center;justify-content:center;gap:5px}
+nav button:hover{color:var(--color-text-primary)}
+nav button.on{color:#9a7a45;border-bottom-color:#c8a96e}
+.body{padding:1.25rem;background:var(--color-background-primary);border-radius:0 0 var(--border-radius-lg) var(--border-radius-lg)}
+.sec{display:none}.sec.on{display:block}
+.stitle{font-size:16px;font-weight:500;margin-bottom:.2rem;color:var(--color-text-primary)}
+.ssub{font-size:12px;color:var(--color-text-secondary);margin-bottom:1rem}
+.fbar{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1rem}
+.fb{background:var(--color-background-secondary);border:.5px solid var(--color-border-tertiary);color:var(--color-text-secondary);font-size:11px;padding:.25rem .65rem;border-radius:100px;cursor:pointer;font-family:var(--font-sans);transition:all .2s}
+.fb:hover{border-color:var(--color-border-secondary)}
+.fb.on{background:#1a2e1e;border-color:#1a2e1e;color:#f5f0e8}
+.mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.65rem}
+.mcard{background:var(--color-background-secondary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:.9rem;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.mcard::before{content:'';position:absolute;top:0;left:0;right:0;height:2.5px;background:#c8a96e;transform:scaleX(0);transition:transform .25s;transform-origin:left}
+.mcard:hover{border-color:var(--color-border-secondary);transform:translateY(-1px)}
+.mcard:hover::before{transform:scaleX(1)}
+.mtag{font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;padding:.15rem .45rem;border-radius:3px;display:inline-block;margin-bottom:.4rem}
+.tjs{background:#fef3c7;color:#92400e}.tnet{background:#dbeafe;color:#1e40af}
+.mcard h3{font-size:12px;font-weight:500;margin-bottom:.3rem;line-height:1.35;color:var(--color-text-primary)}
+.mcard p{font-size:11px;color:var(--color-text-secondary);line-height:1.5}
+.mlevel{margin-top:.5rem;font-size:10px;font-family:var(--font-mono);color:#9a7a45}
+.dbox{background:var(--color-background-secondary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:1.1rem;margin-top:.75rem;display:none}
+.dbox.on{display:block}
+.dhdr{display:flex;align-items:flex-start;margin-bottom:.9rem}
+.dhdr h2{font-size:14px;font-weight:500;flex:1;color:var(--color-text-primary)}
+.xbtn{background:none;border:.5px solid var(--color-border-tertiary);color:var(--color-text-secondary);width:24px;height:24px;border-radius:50%;cursor:pointer;font-size:12px;flex-shrink:0}
+.xbtn:hover{background:var(--color-background-tertiary)}
+.dc h4{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:#9a7a45;margin:1rem 0 .4rem}
+.dc h4:first-child{margin-top:0}
+.dc p{font-size:12px;line-height:1.7;color:var(--color-text-primary)}
+.dc ul{font-size:12px;line-height:1.8;padding-left:1.2rem;color:var(--color-text-primary)}
+.dc code{background:var(--color-background-tertiary);padding:.1rem .3rem;border-radius:3px;font-family:var(--font-mono);font-size:11px}
+.codeblock{background:#1a2e1e;color:#e8d5a8;font-family:var(--font-mono);font-size:11px;padding:.75rem .9rem;border-radius:var(--border-radius-md);display:block;margin:.5rem 0;line-height:1.7;white-space:pre-wrap;overflow-x:auto}
+.hbox{background:rgba(200,169,110,.1);border-left:2.5px solid #c8a96e;padding:.6rem .85rem;border-radius:0 4px 4px 0;margin:.5rem 0;font-size:11px;color:var(--color-text-secondary)}
+.pbar-wrap{height:3px;background:var(--color-background-tertiary);border-radius:2px;margin-bottom:1rem;overflow:hidden}
+.pbar{height:100%;background:linear-gradient(90deg,#9a7a45,#c8a96e);border-radius:2px;transition:width .4s}
+.fcmeta{display:flex;align-items:center;margin-bottom:.75rem}
+.fchint{font-size:11px;color:var(--color-text-tertiary)}
+.fcnum{font-family:var(--font-mono);font-size:11px;color:var(--color-text-secondary);margin-left:auto}
+.fcwrap{perspective:1000px;margin-bottom:1rem}
+.fc{width:100%;min-height:220px;position:relative;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.4,0,.2,1);cursor:pointer}
+.fc.flip{transform:rotateY(180deg)}
+.fcface{position:absolute;inset:0;backface-visibility:hidden;border-radius:var(--border-radius-md);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem;text-align:center}
+.fcfront{background:#1a2e1e;border:.5px solid rgba(200,169,110,.25)}
+.fccat{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:rgba(200,169,110,.6);font-family:var(--font-mono);margin-bottom:1rem}
+.fcq{font-size:14px;color:#f5f0e8;line-height:1.5;font-weight:500;white-space:pre-line}
+.fctip{margin-top:1rem;font-size:10px;color:rgba(245,240,232,.3);font-style:italic}
+.fcback{background:var(--color-background-secondary);border:.5px solid #c8a96e;transform:rotateY(180deg)}
+.fcalbl{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#9a7a45;font-family:var(--font-mono);margin-bottom:.6rem}
+.fca{font-size:12px;color:var(--color-text-primary);line-height:1.7;max-width:420px;white-space:pre-line}
+.fcnav{display:flex;gap:.5rem;align-items:center;justify-content:center}
+.fcnav button{background:var(--color-background-secondary);color:var(--color-text-primary);border:.5px solid var(--color-border-tertiary);padding:.55rem 1.1rem;border-radius:var(--border-radius-md);font-family:var(--font-sans);font-size:12px;cursor:pointer;transition:all .2s}
+.fcnav button:hover{background:var(--color-background-tertiary)}
+.fcnav button:disabled{opacity:.3;cursor:default}
+.flipbtn{background:#c8a96e !important;color:#1a2e1e !important;border-color:#c8a96e !important;font-weight:500 !important}
+.flipbtn:hover{background:#9a7a45 !important;color:#fff !important}
+.qhdr{display:flex;align-items:center;margin-bottom:.75rem}
+.qptxt{font-family:var(--font-mono);font-size:11px;color:var(--color-text-secondary)}
+.qscore{margin-left:auto;background:#1a2e1e;color:#c8a96e;font-family:var(--font-mono);font-size:11px;padding:.2rem .6rem;border-radius:var(--border-radius-md)}
+.qqcard{background:var(--color-background-secondary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:1.1rem;margin-bottom:.75rem}
+.qnum{font-family:var(--font-mono);font-size:10px;color:#9a7a45;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.5rem}
+.qtext{font-size:13px;font-weight:500;line-height:1.5;margin-bottom:1rem;white-space:pre-line;color:var(--color-text-primary)}
+.qopts{display:flex;flex-direction:column;gap:.45rem}
+.qopt{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:.6rem .85rem;cursor:pointer;font-size:12px;text-align:left;font-family:var(--font-sans);display:flex;align-items:flex-start;gap:.5rem;transition:all .2s;width:100%;color:var(--color-text-primary)}
+.qopt:hover:not([disabled]){border-color:var(--color-border-secondary);background:var(--color-background-secondary)}
+.oltr{font-family:var(--font-mono);font-size:10px;font-weight:500;color:var(--color-text-tertiary);min-width:16px;margin-top:1px}
+.qopt.ok{background:var(--color-background-success);border-color:var(--color-border-success);color:var(--color-text-success)}
+.qopt.ok .oltr{color:var(--color-text-success)}
+.qopt.no{background:var(--color-background-danger);border-color:var(--color-border-danger);color:var(--color-text-danger)}
+.qopt.no .oltr{color:var(--color-text-danger)}
+.qexp{margin-top:.75rem;padding:.7rem .85rem;background:rgba(200,169,110,.08);border-left:2.5px solid #c8a96e;border-radius:0 4px 4px 0;font-size:11px;line-height:1.6;color:var(--color-text-secondary);display:none}
+.qexp.on{display:block}
+.qact{margin-top:.75rem}
+.btnp{background:#1a2e1e;color:#f5f0e8;border:none;padding:.6rem 1.4rem;border-radius:var(--border-radius-md);font-family:var(--font-sans);font-size:12px;font-weight:500;cursor:pointer;transition:all .2s}
+.btnp:hover{background:#2d4f30}
+.btng{background:#c8a96e;color:#1a2e1e;border:none;padding:.7rem 1.6rem;border-radius:var(--border-radius-md);font-family:var(--font-sans);font-size:12px;font-weight:500;cursor:pointer;transition:all .2s}
+.btng:hover{background:#9a7a45;color:#fff}
+.qres{background:var(--color-background-secondary);border:.5px solid #c8a96e;border-radius:var(--border-radius-lg);padding:2rem;text-align:center;display:none}
+.qres.on{display:block}
+.scircle{width:90px;height:90px;border-radius:50%;background:#1a2e1e;border:2.5px solid #c8a96e;display:flex;align-items:center;justify-content:center;margin:0 auto .9rem}
+.snum{font-size:22px;font-weight:500;color:#c8a96e}
+.qres h3{font-size:16px;font-weight:500;margin-bottom:.3rem;color:var(--color-text-primary)}
+.qres p{font-size:12px;color:var(--color-text-secondary);margin-bottom:1.1rem}
+</style>
+
+<h2 class="sr-only">Modul interaktif kisi-kisi sumatif akhir tahun kelas XI IPS 2025/2026, berisi materi, flashcard, dan quiz JavaScript serta Jaringan Komputer.</h2>
+
+<div class="app">
+<div class="hdr">
+  <div class="badge">Kelas XI IPS 1-13 &middot; TA 2025/2026</div>
+  <h1>Modul Interaktif <span>Sumatif Akhir Tahun</span></h1>
+  <p>JavaScript Fundamentals &middot; Jaringan Komputer &amp; Internet</p>
+</div>
+<nav>
+  <button class="on" onclick="goTab('overview',this)"><i class="ti ti-book" aria-hidden="true"></i> Materi</button>
+  <button onclick="goTab('flashcards',this)"><i class="ti ti-cards" aria-hidden="true"></i> Flashcard</button>
+  <button onclick="goTab('quiz',this)"><i class="ti ti-pencil" aria-hidden="true"></i> Quiz</button>
+</nav>
+<div class="body">
+
+<div id="tab-overview" class="sec on">
+  <div class="stitle">Ringkasan Materi</div>
+  <div class="ssub">Klik kartu untuk membaca penjelasan detail dan contoh kode.</div>
+  <div class="fbar">
+    <button class="fb on" onclick="fMat('all',this)">Semua</button>
+    <button class="fb" onclick="fMat('js',this)">JavaScript</button>
+    <button class="fb" onclick="fMat('net',this)">Jaringan</button>
+  </div>
+  <div class="mgrid" id="mgrid"></div>
+  <div class="dbox" id="dbox">
+    <div class="dhdr"><h2 id="dtitle"></h2><button class="xbtn" onclick="closeDet()">&#10005;</button></div>
+    <div class="dc" id="dcontent"></div>
+  </div>
+</div>
+
+<div id="tab-flashcards" class="sec">
+  <div class="stitle">Flashcard</div>
+  <div class="ssub">Klik kartu untuk membalik dan melihat jawaban.</div>
+  <div class="fbar" id="fcbar">
+    <button class="fb on" onclick="fFC('all',this)">Semua</button>
+    <button class="fb" onclick="fFC('js',this)">JavaScript</button>
+    <button class="fb" onclick="fFC('net',this)">Jaringan</button>
+  </div>
+  <div class="pbar-wrap"><div class="pbar" id="fcpbar" style="width:5%"></div></div>
+  <div class="fcmeta">
+    <span class="fchint">Klik kartu untuk balik</span>
+    <span class="fcnum" id="fcnum">1 / 20</span>
+  </div>
+  <div class="fcwrap">
+    <div class="fc" id="fc" onclick="flipFC()">
+      <div class="fcface fcfront">
+        <div class="fccat" id="fccat">JavaScript</div>
+        <div class="fcq" id="fcq">Loading...</div>
+        <div class="fctip">Klik untuk melihat jawaban</div>
+      </div>
+      <div class="fcface fcback">
+        <div class="fcalbl">Jawaban</div>
+        <div class="fca" id="fca"></div>
+      </div>
+    </div>
+  </div>
+  <div class="fcnav">
+    <button onclick="fcGo(-1)" id="fcprev"><i class="ti ti-arrow-left" aria-hidden="true"></i> Sebelumnya</button>
+    <button class="flipbtn" onclick="flipFC()">Balik <i class="ti ti-refresh" aria-hidden="true"></i></button>
+    <button onclick="fcGo(1)" id="fcnext">Berikutnya <i class="ti ti-arrow-right" aria-hidden="true"></i></button>
+  </div>
+</div>
+
+<div id="tab-quiz" class="sec">
+  <div class="stitle">Quiz Interaktif</div>
+  <div class="ssub">Klik jawaban, lalu baca penjelasannya.</div>
+  <div class="fbar" id="qzbar">
+    <button class="fb on" onclick="fQZ('all',this)">Semua</button>
+    <button class="fb" onclick="fQZ('js',this)">JavaScript</button>
+    <button class="fb" onclick="fQZ('net',this)">Jaringan</button>
+  </div>
+  <div class="qhdr">
+    <span class="qptxt" id="qptxt">Soal 1 dari 20</span>
+    <span class="qscore" id="qscore">Skor: 0</span>
+  </div>
+  <div class="pbar-wrap"><div class="pbar" id="qpbar" style="width:5%"></div></div>
+  <div id="qcont"></div>
+  <div class="qres" id="qres">
+    <div class="scircle"><div class="snum" id="snum">0%</div></div>
+    <h3 id="rtitle">Selesai!</h3>
+    <p id="rmsg"></p>
+    <button class="btng" onclick="restartQZ()"><i class="ti ti-refresh" aria-hidden="true"></i> Ulangi Quiz</button>
+  </div>
+</div>
+
+</div>
+</div>
+
+<script>
+var MAT=[
+{tag:"js",level:"L1/Pengetahuan",title:"Sejarah & Pengenalan JavaScript",desc:"Asal-usul, penemu, dan perkembangan browser JavaScript.",
+peng:"JavaScript adalah bahasa pemrograman scripting yang diciptakan oleh <strong>Brendan Eich</strong> pada tahun 1995 saat bekerja di Netscape. Awalnya bernama Mocha, lalu LiveScript, dan akhirnya JavaScript.",
+penj:"<h4>Fakta Penting</h4><ul><li>Dibuat <strong>Brendan Eich</strong> (1995) dalam waktu 10 hari</li><li>Pertama diimplementasikan di <strong>Netscape Navigator 2.0</strong></li><li>Nama JS hanya strategi pemasaran — <strong>berbeda total dengan Java</strong></li><li>Standar resminya: <strong>ECMAScript</strong> (ECMA-262)</li></ul><div class='hbox'>JavaScript ≠ Java. Seperti mobil ≠ mobilisasi.</div>",
+contoh:""},
+{tag:"js",level:"L1/Pengetahuan",title:"Sintaksis Dasar — Komentar",desc:"Karakter yang tepat untuk komentar multi-baris di JavaScript.",
+peng:"Komentar adalah teks yang <strong>diabaikan interpreter</strong> dan hanya untuk dibaca programmer. Penting untuk dokumentasi kode.",
+penj:"<h4>Jenis Komentar</h4><ul><li><code>//</code> → komentar satu baris</li><li><code>/* ... */</code> → komentar multi-baris</li></ul>",
+contoh:"// Komentar satu baris\n\n/* Komentar multi-baris\n   bisa beberapa baris */\n\nlet x = 10; // komentar di akhir baris"},
+{tag:"js",level:"L2/Aplikasi",title:"Integrasi HTML & JavaScript",desc:"Posisi tag script internal dan cara menghubungkan file JS eksternal.",
+peng:"JavaScript dapat dimasukkan ke HTML secara <strong>internal</strong> (langsung di file HTML) maupun <strong>eksternal</strong> (file .js terpisah).",
+penj:"<h4>Internal vs Eksternal</h4><ul><li><strong>Internal</strong>: tag script di dalam HTML, letakkan sebelum penutup body</li><li><strong>Eksternal</strong>: gunakan atribut <code>src</code> pada tag script</li></ul><div class='hbox'>Best practice: letakkan script di akhir body agar halaman dimuat dulu.</div>",
+contoh:"[Internal]\n<script>\n  alert('Halo!');\n<\/script>\n\n[Eksternal]\n<script src='script.js'><\/script>"},
+{tag:"js",level:"L2/Analisis",title:"Konsep & Aturan Variabel",desc:"Definisi komponen variabel dan aturan penamaan yang valid/salah.",
+peng:"Variabel adalah <strong>wadah penyimpanan data</strong> sementara di memori. Di JavaScript modern, dideklarasikan dengan <code>var</code>, <code>let</code>, atau <code>const</code>.",
+penj:"<h4>Aturan Penamaan</h4><ul><li>✓ Boleh: huruf, angka, underscore (_), dollar ($)</li><li>✗ Tidak boleh diawali angka</li><li>✗ Tidak boleh ada spasi</li><li>✗ Tidak boleh pakai kata kunci reserved</li><li>✓ Case-sensitive: Nama ≠ nama</li></ul>",
+contoh:"let namaDepan = 'Arvenka'; // VALID\nlet _nilai = 90;            // VALID\nlet $harga = 50000;         // VALID\n\nlet 1angka = 5;             // SALAH: diawali angka\nlet nama siswa = 'Budi';    // SALAH: ada spasi"},
+{tag:"js",level:"L3/Penalaran",title:"Penelusuran Kode (Tracing Output)",desc:"Memprediksi keluaran dari operasi matematika/logika pada variabel.",
+peng:"Tracing adalah kemampuan <strong>mengikuti alur eksekusi baris per baris</strong> untuk memprediksi output tanpa menjalankannya di browser.",
+penj:"<h4>Cara Tracing</h4><ul><li>Baca dari atas ke bawah</li><li>Catat nilai variabel setiap kali berubah</li><li>Perkalian/bagi dikerjakan sebelum tambah/kurang</li></ul>",
+contoh:"let a = 5;\nlet b = 3;\nlet c = a + b * 2;  // b*2=6, lalu 5+6=11\nlet d = c - a;      // 11-5=6\nconsole.log(d);     // OUTPUT: 6"},
+{tag:"js",level:"L1/Pengetahuan",title:"Tipe Data & Deklarasi Nilai",desc:"Klasifikasi tipe data bawaan JS: String, Float, Boolean, dst.",
+peng:"Tipe data adalah <strong>kategori/jenis nilai</strong> yang disimpan dalam variabel. JS bersifat dynamically typed — tipe ditentukan otomatis.",
+penj:"<h4>Tipe Data Primitif</h4><ul><li><strong>String</strong>: teks, diapit tanda kutip</li><li><strong>Number</strong>: angka bulat maupun desimal (float)</li><li><strong>Boolean</strong>: hanya true atau false</li><li><strong>Null</strong>: nilai yang sengaja dikosongkan</li><li><strong>Undefined</strong>: variabel belum diberi nilai</li></ul>",
+contoh:"let nama = 'Arvenka'; // String\nlet usia = 17;        // Number (integer)\nlet tinggi = 165.5;   // Number (float)\nlet lulus = true;     // Boolean\nlet nilai = null;     // Null\nlet alamat;           // Undefined\n\nconsole.log(typeof nama); // 'string'"},
+{tag:"js",level:"L2/Pengetahuan",title:"Fungsi Konversi Tipe Data (Parsing)",desc:"parseInt, parseFloat, dan prediksi nilai NaN.",
+peng:"Parsing adalah proses <strong>mengubah tipe data</strong> dari satu format ke format lain. Fungsi bawaan JS: <code>parseInt()</code> dan <code>parseFloat()</code>.",
+penj:"<h4>parseInt vs parseFloat</h4><ul><li><code>parseInt('42')</code> → 42</li><li><code>parseFloat('3.14')</code> → 3.14</li><li><code>parseInt('abc')</code> → NaN (gagal parse)</li><li><code>parseInt('12px')</code> → 12 (ambil angka di depan)</li></ul><div class='hbox'><strong>NaN</strong> (Not a Number) muncul saat gagal konversi.</div>",
+contoh:"let a = parseInt('50');      // 50\nlet b = parseFloat('9.99');  // 9.99\nlet c = parseInt('abc');     // NaN\nlet d = parseInt('12px');    // 12\nconsole.log(isNaN(c));       // true"},
+{tag:"js",level:"L2/Aplikasi",title:"Operator Aritmatika & Modulus",desc:"Simbol modulus (%) dan prediksi hasil akhir perhitungan.",
+peng:"Operator aritmatika untuk <strong>operasi matematika</strong>. Operator <strong>modulus (%)</strong> menghasilkan sisa pembagian.",
+penj:"<h4>Daftar Operator</h4><ul><li><code>+</code> penjumlahan</li><li><code>-</code> pengurangan</li><li><code>*</code> perkalian</li><li><code>/</code> pembagian</li><li><code>%</code> modulus (sisa bagi)</li><li><code>**</code> pangkat</li></ul><div class='hbox'>10 % 3 = 1 (sisa dari 10 ÷ 3 = 3 sisa 1). Berguna untuk cek genap/ganjil!</div>",
+contoh:"console.log(10 % 3); // 1\nconsole.log(15 % 5); // 0\nconsole.log(7 % 2);  // 1\n\nlet n = 8;\nif (n % 2 === 0) {\n  console.log('Genap');\n}"},
+{tag:"js",level:"L3/Penalaran",title:"Operator Logika & Perbandingan",desc:"Evaluasi ekspresi logika dan nilai kebenaran true/false.",
+peng:"Operator perbandingan membandingkan dua nilai dan menghasilkan Boolean. Operator logika menggabungkan beberapa kondisi.",
+penj:"<h4>Perbandingan</h4><ul><li><code>==</code> sama nilai saja</li><li><code>===</code> sama nilai DAN tipe</li><li><code>!=</code> tidak sama</li></ul><h4>Logika</h4><ul><li><code>&amp;&amp;</code> AND: kedua kondisi harus true</li><li><code>||</code> OR: salah satu true cukup</li><li><code>!</code> NOT: membalik boolean</li></ul>",
+contoh:"console.log(5 > 3);         // true\nconsole.log('5' == 5);      // true (nilai sama)\nconsole.log('5' === 5);     // false (tipe beda)\nconsole.log(true && false); // false\nconsole.log(true || false); // true\nconsole.log(!true);         // false"},
+{tag:"js",level:"L2/Aplikasi",title:"Struktur Percabangan (If / If-Else)",desc:"Bentuk umum if, satu blok keputusan, dan alur kondisi.",
+peng:"Percabangan memungkinkan program <strong>mengambil keputusan berbeda berdasarkan kondisi</strong>. Struktur dasar menggunakan <code>if</code> dan <code>else</code>.",
+penj:"<h4>Variasi Percabangan</h4><ul><li><strong>if</strong>: eksekusi hanya jika kondisi true</li><li><strong>if-else</strong>: true → A, false → B</li><li><strong>if-else if-else</strong>: banyak kondisi bertingkat</li></ul>",
+contoh:"let nilai = 75;\n\nif (nilai >= 60) {\n  console.log('Lulus');\n} else {\n  console.log('Tidak Lulus');\n}\n\nif (nilai >= 90) { console.log('A'); }\nelse if (nilai >= 80) { console.log('B'); }\nelse if (nilai >= 70) { console.log('C'); }\nelse { console.log('D'); }"},
+{tag:"js",level:"L2/Aplikasi",title:"Percabangan Kompleks & Switch Case",desc:"Struktur Else-If majemuk dan penulisan Switch Case.",
+peng:"<code>switch</code> adalah alternatif if-else if panjang. Lebih rapi saat ada <strong>banyak kemungkinan nilai dari satu variabel</strong>.",
+penj:"<h4>Komponen Switch Case</h4><ul><li><code>switch(ekspresi)</code>: nilai yang dibandingkan</li><li><code>case nilai:</code>: kondisi yang dicek</li><li><code>break;</code>: hentikan eksekusi (WAJIB!)</li><li><code>default:</code>: jika tidak ada case yang cocok</li></ul><div class='hbox'>Jika lupa break, terjadi fall-through ke case berikutnya!</div>",
+contoh:"let hari = 1;\n\nswitch(hari) {\n  case 1:\n    console.log('Senin');\n    break;\n  case 2:\n    console.log('Selasa');\n    break;\n  default:\n    console.log('Hari lain');\n}\n// OUTPUT: Senin"},
+{tag:"js",level:"L1/Pemahaman",title:"Struktur Perulangan (Looping)",desc:"Counted Loop (tertentu) vs Uncounted Loop (tidak tentu).",
+peng:"Looping adalah struktur yang mengeksekusi blok kode <strong>berulang kali</strong> sampai kondisi tertentu terpenuhi.",
+penj:"<h4>Jenis Perulangan</h4><ul><li><strong>Counted Loop</strong>: jumlah iterasi pasti → gunakan <code>for</code></li><li><strong>Uncounted Loop</strong>: berulang sampai kondisi berubah → <code>while</code> / <code>do-while</code></li></ul>",
+contoh:"// Counted Loop (for) - 5 kali pasti:\nfor (let i = 1; i <= 5; i++) {\n  console.log('Iterasi ke-' + i);\n}\n\n// Uncounted Loop (while):\nlet x = 10;\nwhile (x > 0) {\n  console.log(x);\n  x -= 3;\n}"},
+{tag:"js",level:"L3/Penalaran",title:"Variable Scope (Global vs Local)",desc:"Menentukan output berdasarkan konsep variabel lokal dan global.",
+peng:"Scope adalah <strong>jangkauan akses sebuah variabel</strong>. Variabel <code>let</code> memiliki block scope — hanya bisa diakses dalam blok tempat ia dideklarasikan.",
+penj:"<h4>Global vs Local</h4><ul><li><strong>Global</strong>: di luar fungsi/blok, bisa diakses di mana saja</li><li><strong>Local</strong>: di dalam fungsi/blok dengan let, hanya di blok itu</li></ul><div class='hbox'>Dengan let, variabel di dalam blok TIDAK BISA diakses dari luar!</div>",
+contoh:"let x = 'Global';\n\nfunction test() {\n  let x = 'Local'; // variabel berbeda!\n  console.log(x);  // 'Local'\n}\n\ntest();\nconsole.log(x); // 'Global'"},
+{tag:"net",level:"L1/Pengetahuan",title:"Karakteristik Topologi Jaringan",desc:"Karakteristik utama topologi fisik, khususnya Star Network.",
+peng:"Topologi jaringan adalah <strong>pola/susunan fisik atau logis</strong> bagaimana perangkat dalam jaringan saling terhubung.",
+penj:"<h4>Topologi Star (Bintang)</h4><ul><li>Semua perangkat terhubung ke <strong>satu perangkat pusat</strong> (hub/switch)</li><li>Satu kabel putus → hanya perangkat itu terdampak</li><li>Mudah ditambah atau dikurangi perangkat</li><li>Pusat rusak → seluruh jaringan mati</li><li>Banyak digunakan di LAN kantor/sekolah</li></ul>",
+contoh:""},
+{tag:"net",level:"L3/Analisis",title:"Analisis Kelebihan Topologi Jaringan",desc:"Membandingkan keandalan dan kelemahan instalasi Star vs Bus.",
+peng:"Setiap topologi memiliki <strong>kelebihan dan kelemahan</strong> yang harus dianalisis sesuai kebutuhan jaringan.",
+penj:"<h4>Star vs Bus</h4><ul><li><strong>Star</strong>: ✓ Mudah troubleshoot ✓ Bisa ditambah ✗ Bergantung hub ✗ Kabel banyak</li><li><strong>Bus</strong>: ✓ Hemat kabel ✓ Mudah dipasang ✗ Backbone putus = semua mati ✗ Performa turun saat traffic padat</li></ul>",
+contoh:""},
+{tag:"net",level:"L1/Pengetahuan",title:"Model Lapisan Jaringan (OSI Layer)",desc:"7 lapisan OSI, contoh protokol, dan lapisan yang menghadap pengguna.",
+peng:"Model OSI (Open Systems Interconnection) adalah <strong>kerangka referensi 7 lapisan</strong> yang menjelaskan bagaimana data dikomunikasikan antar perangkat.",
+penj:"<h4>7 Lapisan OSI</h4><ul><li><strong>7. Application</strong>: antarmuka ke pengguna (HTTP, FTP, DNS)</li><li><strong>6. Presentation</strong>: format, enkripsi (SSL/TLS)</li><li><strong>5. Session</strong>: manajemen sesi</li><li><strong>4. Transport</strong>: pengiriman end-to-end (TCP, UDP)</li><li><strong>3. Network</strong>: routing (IP)</li><li><strong>2. Data Link</strong>: transfer antar node (MAC)</li><li><strong>1. Physical</strong>: transmisi bit fisik</li></ul><div class='hbox'>Hafalan: All People Seem To Need Data Processing</div>",
+contoh:""},
+{tag:"net",level:"L1/Pemahaman",title:"Mekanisme Data Topologi Ring",desc:"Fungsi utama metode token passing pada transmisi data ring.",
+peng:"Pada topologi ring, data berjalan dalam <strong>satu arah melingkar</strong>. Mekanisme pengirimannya menggunakan metode <strong>token passing</strong>.",
+penj:"<h4>Token Passing</h4><ul><li>Sebuah token beredar terus-menerus dalam ring</li><li>Perangkat hanya boleh mengirim data jika <strong>memegang token</strong></li><li>Setelah selesai, token dilepas ke perangkat berikutnya</li><li>Mencegah collision</li></ul>",
+contoh:""},
+{tag:"net",level:"L2/Aplikasi",title:"Kelebihan Topologi Mesh",desc:"Full-mesh, jalur alternatif, dan fault tolerance.",
+peng:"Pada topologi mesh, setiap perangkat terhubung <strong>langsung ke semua perangkat lain</strong> (full-mesh). Menghasilkan banyak jalur alternatif.",
+penj:"<h4>Keunggulan Mesh</h4><ul><li>✓ <strong>Fault tolerance</strong> tinggi: satu jalur putus → data lewat jalur lain</li><li>✓ Tidak ada titik kegagalan tunggal</li><li>✓ Sangat andal untuk jaringan kritis</li><li>✗ Biaya instalasi sangat tinggi</li><li>✗ Sulit dikonfigurasi</li></ul>",
+contoh:""},
+{tag:"net",level:"L3/Penalaran",title:"Kelemahan Topologi Bus",desc:"Dampak kerusakan kabel utama (backbone) pada topologi bus.",
+peng:"Topologi bus menggunakan <strong>satu kabel utama (backbone)</strong> yang menghubungkan semua perangkat secara linier.",
+penj:"<h4>Kelemahan Kritis</h4><ul><li>Backbone putus → <strong>seluruh jaringan berhenti total</strong></li><li>Performa turun saat banyak perangkat kirim bersamaan</li><li>Sulit mendeteksi kerusakan</li><li>Tidak cocok untuk jaringan besar</li></ul>",
+contoh:""},
+{tag:"net",level:"L3/Analisis",title:"Perbandingan Topologi Tree & Star",desc:"Hubungan struktural dan hierarki antara topologi tree dan star.",
+peng:"Topologi tree adalah <strong>kombinasi/pengembangan dari topologi star</strong> yang disusun secara hierarkis seperti cabang-cabang pohon.",
+penj:"<h4>Star vs Tree</h4><ul><li><strong>Star</strong>: satu hub pusat, semua perangkat terhubung langsung (satu level)</li><li><strong>Tree</strong>: hierarki bertingkat — hub utama → hub cabang → perangkat</li><li>Tree cocok untuk jaringan <strong>skala besar</strong> seperti kampus/gedung</li></ul>",
+contoh:""}
+];
+
+var FC=[
+{tag:"js",q:"Siapa penemu JavaScript dan tahun berapa diciptakan?",a:"Brendan Eich pada tahun 1995 di Netscape.\nAwalnya bernama Mocha → LiveScript → JavaScript."},
+{tag:"js",q:"Karakter apa untuk komentar multi-baris di JavaScript?",a:"/* komentar di sini */\n\nUntuk satu baris:\n// komentar"},
+{tag:"js",q:"Di mana posisi terbaik tag script dalam HTML?",a:"Di akhir tag body (sebelum /body).\nAgar halaman dimuat sepenuhnya dulu sebelum JS berjalan."},
+{tag:"js",q:"Manakah yang TIDAK valid?\nA) _nilai   B) $harga\nC) 2angka   D) namaDepan",a:"C) 2angka — TIDAK VALID\nVariabel TIDAK BOLEH diawali dengan angka."},
+{tag:"js",q:"Apa output dari:\nlet a = 5;\nlet b = a * 2 + 3;\nconsole.log(b);",a:"Output: 13\n(a*2 = 10, lalu 10+3 = 13)\nPerkalian dikerjakan sebelum penjumlahan."},
+{tag:"js",q:"Sebutkan 5 tipe data primitif di JavaScript!",a:"1. String (teks)\n2. Number (angka & desimal)\n3. Boolean (true/false)\n4. Null (kosong sengaja)\n5. Undefined (belum diberi nilai)"},
+{tag:"js",q:"Apa hasil dari:\nparseInt('12px') dan parseInt('abc')?",a:"parseInt('12px') = 12\n(ambil angka di depan)\n\nparseInt('abc') = NaN\n(Not a Number, gagal parse)"},
+{tag:"js",q:"Apa hasil dari: 17 % 5",a:"Hasilnya: 2\n\n17 ÷ 5 = 3 sisa 2\nOperator % menghasilkan sisa pembagian."},
+{tag:"js",q:"Perbedaan operator == dan === ?",a:"== hanya bandingkan NILAI\n('5' == 5 → true)\n\n=== bandingkan NILAI + TIPE DATA\n('5' === 5 → false, string ≠ number)"},
+{tag:"js",q:"Apa yang terjadi jika lupa break;\ndalam switch case?",a:"Terjadi fall-through:\nProgram terus eksekusi case berikutnya meskipun kondisi tidak cocok."},
+{tag:"js",q:"Perbedaan Counted Loop\ndan Uncounted Loop?",a:"Counted Loop:\nJumlah iterasi sudah pasti → for\n\nUncounted Loop:\nBerulang sampai kondisi berubah → while / do-while"},
+{tag:"js",q:"Apa output dari:\nlet x = 'Global';\nfunction f() {\n  let x = 'Local';\n  console.log(x);\n}\nf();\nconsole.log(x);",a:"Baris 1: 'Local' (dari dalam fungsi)\nBaris 2: 'Global' (dari scope luar)\n\nlet = block scope, keduanya VARIABEL BERBEDA."},
+{tag:"net",q:"Apa karakteristik utama topologi Star?",a:"Semua perangkat terhubung ke SATU pusat (hub/switch).\n\nSatu perangkat rusak: hanya perangkat itu mati.\nPusat rusak: seluruh jaringan mati."},
+{tag:"net",q:"Sebutkan 7 lapisan OSI\ndari atas ke bawah!",a:"7. Application\n6. Presentation\n5. Session\n4. Transport\n3. Network\n2. Data Link\n1. Physical\n\nHafalan: All People Seem To Need Data Processing"},
+{tag:"net",q:"Lapisan OSI mana yang\nantarmuka langsung ke pengguna?",a:"Lapisan 7: Application Layer\n\nContoh protokol:\nHTTP (web), FTP (file), DNS (domain), SMTP (email)"},
+{tag:"net",q:"Bagaimana mekanisme token passing\npada topologi Ring?",a:"Token beredar terus dalam ring.\nPerangkat hanya boleh kirim data saat MEMEGANG TOKEN.\nSetelah selesai, token dilepas ke berikutnya.\n→ Mencegah collision."},
+{tag:"net",q:"Apa keunggulan utama topologi Mesh?",a:"Fault Tolerance tinggi!\n\nSetiap perangkat terhubung ke semua perangkat lain.\nJika satu jalur putus, data lewat jalur lain.\nTidak ada titik kegagalan tunggal."},
+{tag:"net",q:"Dampak jika kabel backbone\ntopologi Bus rusak?",a:"SELURUH JARINGAN BERHENTI TOTAL.\n\nSemua perangkat bergantung pada satu kabel utama.\nIni kelemahan terbesar topologi bus."},
+{tag:"net",q:"Perbedaan topologi Tree dengan Star?",a:"Star: semua ke SATU pusat, satu level.\n\nTree: hierarki bertingkat:\nhub utama → cabang → perangkat\n\nTree = pengembangan Star untuk jaringan besar."},
+{tag:"net",q:"Mana yang lebih hemat kabel:\nStar atau Bus?",a:"Bus lebih hemat kabel!\n\nHanya memakai satu kabel utama (backbone)\nuntuk menghubungkan semua perangkat."}
+];
+
+var QZ=[
+{tag:"js",q:"Siapa penemu JavaScript?",opts:["James Gosling","Brendan Eich","Tim Berners-Lee","Linus Torvalds"],ans:1,exp:"JavaScript diciptakan oleh <strong>Brendan Eich</strong> pada 1995 di Netscape. James Gosling adalah penemu Java."},
+{tag:"js",q:"Karakter mana untuk komentar multi-baris di JavaScript?",opts:["// komentar //","# komentar #","/* komentar */","<!-- komentar -->"],ans:2,exp:"<strong>/* ... */</strong> untuk komentar multi-baris. Tanda // hanya untuk satu baris."},
+{tag:"js",q:"Manakah nama variabel yang VALID di JavaScript?",opts:["2nama","nama siswa","_namaDepan","let"],ans:2,exp:"<strong>_namaDepan</strong> valid: dimulai underscore, tanpa spasi. Tidak boleh diawali angka, ada spasi, atau pakai kata kunci reserved."},
+{tag:"js",q:"Apa tipe data dari nilai: true",opts:["String","Number","Boolean","Undefined"],ans:2,exp:"<strong>true</strong> adalah nilai Boolean. Boolean hanya memiliki dua nilai: true atau false."},
+{tag:"js",q:"Apa hasil dari: parseInt('abc')",opts:["0","abc","null","NaN"],ans:3,exp:"<strong>NaN</strong> (Not a Number) muncul saat parseInt gagal mengonversi string yang bukan angka."},
+{tag:"js",q:"Apa hasil dari: 20 % 6",opts:["3","2","4","0"],ans:1,exp:"20 dibagi 6 = 3 sisa <strong>2</strong>. Operator % menghasilkan sisa pembagian."},
+{tag:"js",q:"Apa hasil dari: '5' === 5",opts:["true","false","undefined","error"],ans:1,exp:"<strong>false</strong>. Operator === memeriksa nilai DAN tipe. '5' adalah String, 5 adalah Number."},
+{tag:"js",q:"Jika lupa break di switch case, apa yang terjadi?",opts:["Program error","Case diulang","Fall-through ke case berikutnya","Switch berhenti otomatis"],ans:2,exp:"Terjadi <strong>fall-through</strong>: program terus eksekusi case berikutnya tanpa memeriksa kondisi."},
+{tag:"js",q:"Mana yang termasuk Counted Loop?",opts:["while","do-while","for","Semua benar"],ans:2,exp:"<strong>for</strong> adalah Counted Loop karena sudah jelas berapa kali berulang. while dan do-while adalah Uncounted Loop."},
+{tag:"js",q:"Apa output dari:\nlet x = 10;\nif (true) { let x = 20; }\nconsole.log(x);",opts:["20","10","undefined","Error"],ans:1,exp:"Output: <strong>10</strong>. Variabel let x di dalam blok if adalah variabel berbeda (local scope). Variabel global x tetap 10."},
+{tag:"net",q:"Apa yang terjadi jika hub/switch pada topologi Star rusak?",opts:["Hanya satu perangkat mati","Seluruh jaringan mati","Data lewat jalur lain","Tidak ada pengaruh"],ans:1,exp:"Jika perangkat pusat rusak, <strong>seluruh jaringan mati</strong> karena semua perangkat bergantung pada pusat tersebut."},
+{tag:"net",q:"Lapisan OSI ke berapa yang antarmuka langsung ke pengguna?",opts:["Lapisan 1","Lapisan 4","Lapisan 7","Lapisan 5"],ans:2,exp:"Lapisan ke-7: <strong>Application Layer</strong>. Contoh protokol: HTTP, FTP, DNS."},
+{tag:"net",q:"Fungsi utama token passing pada topologi Ring?",opts:["Mengenkripsi data","Mengatur giliran pengiriman data","Membagi bandwidth","Menyimpan data backup"],ans:1,exp:"Token passing mengatur agar hanya satu perangkat yang kirim data dalam satu waktu, <strong>mencegah collision</strong>."},
+{tag:"net",q:"Apa keunggulan utama topologi Mesh?",opts:["Hemat kabel","Mudah dipasang","Fault tolerance tinggi","Murah biayanya"],ans:2,exp:"Topologi Mesh punya <strong>fault tolerance</strong> tinggi karena ada banyak jalur alternatif jika satu jalur putus."},
+{tag:"net",q:"Apa yang terjadi jika backbone topologi Bus putus?",opts:["Hanya satu perangkat mati","Ada jalur alternatif","Seluruh jaringan berhenti total","Data dikirim ulang otomatis"],ans:2,exp:"Jika backbone putus, <strong>seluruh jaringan berhenti</strong> karena semua perangkat bergantung pada kabel utama yang sama."},
+{tag:"net",q:"Topologi mana yang pengembangan hierarkis dari Star?",opts:["Bus","Mesh","Ring","Tree"],ans:3,exp:"Topologi <strong>Tree</strong> adalah pengembangan Star dengan hierarki bertingkat: hub utama → cabang → perangkat."},
+{tag:"net",q:"Mana yang lebih hemat kabel: Star atau Bus?",opts:["Star","Bus","Mesh","Ring"],ans:1,exp:"Topologi <strong>Bus</strong> lebih hemat kabel karena hanya memakai satu kabel utama untuk menghubungkan semua perangkat."},
+{tag:"js",q:"Apa hasil dari: parseFloat('9.99abc')",opts:["NaN","9","9.99","Error"],ans:2,exp:"<strong>9.99</strong>. parseFloat ambil angka desimal pertama dan berhenti saat menemukan karakter non-angka."},
+{tag:"js",q:"Apa output dari: console.log(typeof 42)",opts:['"number"','"integer"','"float"','"string"'],ans:0,exp:"Output: <strong>\"number\"</strong>. Di JavaScript, semua angka (integer maupun float) bertipe \"number\"."},
+{tag:"net",q:"Kepanjangan OSI dalam model jaringan?",opts:["Open System Integration","Open Systems Interconnection","Online System Interface","Open Software Interconnection"],ans:1,exp:"OSI = <strong>Open Systems Interconnection</strong>, model referensi 7 lapisan untuk komunikasi jaringan komputer."}
+];
+
+var matFil="all", fcFil="all", fcArr=FC.slice(), fcIdx=0, fcFlipped=false;
+var qzFil="all", qzArr=QZ.slice(), qzIdx=0, qzScore=0, qzAnswered=false;
+
+function goTab(id,btn){
+  document.querySelectorAll(".sec").forEach(function(s){s.classList.remove("on");});
+  document.querySelectorAll("nav button").forEach(function(b){b.classList.remove("on");});
+  document.getElementById("tab-"+id).classList.add("on");
+  btn.classList.add("on");
+}
+
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+
+function renderMat(f){
+  var g=document.getElementById("mgrid"); g.innerHTML="";
+  MAT.filter(function(m){return f==="all"||m.tag===f;}).forEach(function(m){
+    var d=document.createElement("div"); d.className="mcard";
+    d.innerHTML="<span class='mtag t"+m.tag+"'>"+(m.tag==="js"?"JavaScript":"Jaringan")+"</span><h3>"+m.title+"</h3><p>"+m.desc+"</p><div class='mlevel'>"+m.level+"</div>";
+    d.onclick=function(){openDet(m);}; g.appendChild(d);
+  });
+}
+function fMat(f,btn){
+  document.querySelectorAll(".fbar .fb").forEach(function(b){b.classList.remove("on");});
+  btn.classList.add("on"); renderMat(f); closeDet();
+}
+function openDet(m){
+  document.getElementById("dtitle").textContent=m.title;
+  var h="";
+  if(m.peng) h+="<h4>Pengertian</h4><p>"+m.peng+"</p>";
+  if(m.penj) h+=m.penj;
+  if(m.contoh) h+="<h4>Contoh Kode</h4><div class='codeblock'>"+esc(m.contoh)+"</div>";
+  document.getElementById("dcontent").innerHTML=h;
+  document.getElementById("dbox").classList.add("on");
+  document.getElementById("dbox").scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+function closeDet(){document.getElementById("dbox").classList.remove("on");}
+
+function fFC(f,btn){
+  document.querySelectorAll("#fcbar .fb").forEach(function(b){b.classList.remove("on");});
+  btn.classList.add("on"); fcFil=f;
+  fcArr=f==="all"?FC.slice():FC.filter(function(x){return x.tag===f;});
+  fcIdx=0; renderFC();
+}
+function renderFC(){
+  var c=fcArr[fcIdx]; fcFlipped=false;
+  document.getElementById("fc").classList.remove("flip");
+  document.getElementById("fccat").textContent=c.tag==="js"?"JavaScript":"Jaringan";
+  document.getElementById("fcq").textContent=c.q;
+  document.getElementById("fca").textContent=c.a;
+  document.getElementById("fcnum").textContent=(fcIdx+1)+" / "+fcArr.length;
+  document.getElementById("fcprev").disabled=fcIdx===0;
+  document.getElementById("fcnext").disabled=fcIdx===fcArr.length-1;
+  document.getElementById("fcpbar").style.width=(((fcIdx+1)/fcArr.length)*100)+"%";
+}
+function flipFC(){fcFlipped=!fcFlipped; document.getElementById("fc").classList.toggle("flip",fcFlipped);}
+function fcGo(d){var n=fcIdx+d; if(n<0||n>=fcArr.length)return; fcIdx=n; renderFC();}
+
+function fQZ(f,btn){
+  document.querySelectorAll("#qzbar .fb").forEach(function(b){b.classList.remove("on");});
+  btn.classList.add("on"); qzFil=f;
+  qzArr=f==="all"?QZ.slice():QZ.filter(function(x){return x.tag===f;});
+  qzIdx=0; qzScore=0; qzAnswered=false;
+  document.getElementById("qres").classList.remove("on"); renderQZ();
+}
+function renderQZ(){
+  if(qzIdx>=qzArr.length){showRes(); return;}
+  var q=qzArr[qzIdx], tot=qzArr.length;
+  document.getElementById("qptxt").textContent="Soal "+(qzIdx+1)+" dari "+tot;
+  document.getElementById("qscore").textContent="Skor: "+qzScore;
+  document.getElementById("qpbar").style.width=Math.max((qzIdx/tot)*100,3)+"%";
+  var L=["A","B","C","D"];
+  var opts=q.opts.map(function(o,i){return "<button class='qopt' onclick='ansQZ("+i+")' id='qo"+i+"'><span class='oltr'>"+L[i]+"</span>"+o+"</button>";}).join("");
+  document.getElementById("qcont").innerHTML=
+    "<div class='qqcard'><div class='qnum'>Soal "+(qzIdx+1)+" · "+(q.tag==="js"?"JavaScript":"Jaringan")+"</div>"+
+    "<div class='qtext'>"+q.q+"</div><div class='qopts'>"+opts+"</div>"+
+    "<div class='qexp' id='qexp'><strong>Penjelasan:</strong> "+q.exp+"</div></div>"+
+    "<div class='qact'><button class='btnp' id='nxtbtn' onclick='nextQZ()' style='display:none'>"+
+    (qzIdx+1<tot?"Soal Berikutnya →":"Lihat Hasil")+"</button></div>";
+}
+function ansQZ(ch){
+  if(qzAnswered)return; qzAnswered=true;
+  var q=qzArr[qzIdx];
+  for(var i=0;i<q.opts.length;i++){
+    var b=document.getElementById("qo"+i);
+    if(b){b.disabled=true; if(i===q.ans)b.classList.add("ok"); if(i===ch&&ch!==q.ans)b.classList.add("no");}
+  }
+  if(ch===q.ans)qzScore++;
+  document.getElementById("qscore").textContent="Skor: "+qzScore;
+  var e=document.getElementById("qexp"); if(e)e.classList.add("on");
+  var n=document.getElementById("nxtbtn"); if(n)n.style.display="inline-block";
+}
+function nextQZ(){qzIdx++; qzAnswered=false; renderQZ();}
+function showRes(){
+  document.getElementById("qcont").innerHTML="";
+  document.getElementById("qpbar").style.width="100%";
+  var tot=qzArr.length, pct=Math.round((qzScore/tot)*100);
+  document.getElementById("snum").textContent=pct+"%";
+  var t,m;
+  if(pct>=90){t="Luar Biasa!";m="Kamu mendapat "+qzScore+" dari "+tot+" soal. Hasil sempurna!";}
+  else if(pct>=75){t="Bagus Sekali!";m="Kamu mendapat "+qzScore+" dari "+tot+" soal. Sedikit lagi sempurna!";}
+  else if(pct>=60){t="Cukup Baik";m="Kamu mendapat "+qzScore+" dari "+tot+" soal. Review materi yang belum paham ya!";}
+  else{t="Terus Semangat!";m="Kamu mendapat "+qzScore+" dari "+tot+" soal. Pelajari lagi materinya!";}
+  document.getElementById("rtitle").textContent=t;
+  document.getElementById("rmsg").textContent=m;
+  document.getElementById("qres").classList.add("on");
+  document.getElementById("qptxt").textContent="Quiz selesai!";
+}
+function restartQZ(){
+  qzIdx=0; qzScore=0; qzAnswered=false;
+  document.getElementById("qres").classList.remove("on");
+  qzArr=qzFil==="all"?QZ.slice():QZ.filter(function(x){return x.tag===qzFil;}); renderQZ();
+}
+
+renderMat("all"); renderFC(); renderQZ();
+</script>
